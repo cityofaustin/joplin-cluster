@@ -1,0 +1,40 @@
+version: '3'
+services:
+
+  joplin2db:
+    image: 'mongo:latest'
+    volumes:
+      - 'mongo-vol:/data/db'
+    ports:
+      - "27017:27017"
+
+  joplin2:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    environment:
+      COCKPIT_SESSION_NAME: cockpit
+      COCKPIT_SALT: "xw8X77zZ262X4QwGf32LW434Vtbod9H"
+      COCKPIT_DATABASE_SERVER: 'mongodb://joplin2db:27017'
+      COCKPIT_DATABASE_NAME: cockpit_master
+    ports:
+      - "8000:80"
+    depends_on:
+      - joplin2db
+
+
+
+  joplin2dba:
+    image: mongoclient/mongoclient
+    ports:
+      - "3000:3000"
+    environment:
+      MONGO_URL: 'mongodb://joplin2db:27017/cockpit_master'
+    depends_on:
+      - joplin2
+
+volumes:
+  mongo-vol: null
+  esdata1:
+    driver: local
+
