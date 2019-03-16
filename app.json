@@ -1,0 +1,22 @@
+{
+  "name": "joplin-cluster",
+  "scripts": {},
+  "env": {
+    "JANIS_URL": {
+      "required": true
+    },
+    "STYLEGUIDE_URL": {
+      "required": true
+    },
+    "DEBUG": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "addons": [],
+  "buildpacks": []
+}

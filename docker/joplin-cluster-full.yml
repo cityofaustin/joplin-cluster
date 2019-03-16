@@ -1,0 +1,71 @@
+version: '3'
+services:
+  joplin2db:
+    image: 'mongo:latest'
+    volumes:
+      - 'mongo-vol:/data/db'
+    ports:
+      - "27017:27017"
+
+  joplin2:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    environment:
+      COCKPIT_SESSION_NAME: cockpit
+      COCKPIT_SALT: "xw8X77zZ262X4QwGf32LW434Vtbod9H"
+      COCKPIT_DATABASE_SERVER: 'mongodb://joplin2db:27017'
+      COCKPIT_DATABASE_NAME: cockpit_master
+#      "key" => getenv('COCKPIT_S3_STORAGE_KEY'),
+#      "secret" => getenv('COCKPIT_S3_STORAGE_SECRET'),
+#      "region" => getenv('COCKPIT_S3_STORAGE_REGION'),
+#      "bucket" => getenv('COCKPIT_S3_STORAGE_BUCKET'),
+#      "prefix" => getenv('COCKPIT_S3_STORAGE_PREFIX'),
+      COCKPIT_ELASTICSEARCH_HOSTS: "http://joplin2es:9200"
+      COCKPIT_ELASTICSEARCH_INDEX: "joplin"
+    ports:
+      - "8000:80"
+    depends_on:
+      - joplin2db
+
+
+
+  joplin2dba:
+    image: mongoclient/mongoclient
+    ports:
+      - "3000:3000"
+    environment:
+      MONGO_URL: 'mongodb://joplin2db:27017/cockpit_master'
+    depends_on:
+      - joplin2
+
+  joplin2es:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.6.1
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata1:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+  joplin2kibana:
+    image: docker.elastic.co/kibana/kibana:6.6.1
+    environment:
+      SERVER_NAME: joplin2kibana
+      ELASTICSEARCH_HOSTS: http://joplin2es:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      - joplin2es
+
+
+volumes:
+  mongo-vol: null
+  esdata1:
+    driver: local
+
