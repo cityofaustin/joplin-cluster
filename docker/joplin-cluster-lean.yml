@@ -11,7 +11,7 @@ services:
   joplin2:
     build:
       context: ..
-      dockerfile: docker/Dockerfile
+      dockerfile: Dockerfile
     environment:
       COCKPIT_SESSION_NAME: cockpit
       COCKPIT_SALT: "xw8X77zZ262X4QwGf32LW434Vtbod9H"
