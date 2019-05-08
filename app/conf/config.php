@@ -2,7 +2,7 @@
 
 $configs = [];
 
-$configs["app.name"] = "Joplin";
+$configs["app.name"] = "City of Austin";
 
 $configs['languages'] = [
     'es' => 'Spanish',
@@ -56,16 +56,16 @@ cloudstorage:
         prefix: subfolder-name
         url: https://s3.eu-central-1.amazonaws.com
 */
-$configs["cloudstorage"] = [
-    "assets" => [
-        "type" => "s3",
-        "key" => getenv('COCKPIT_S3_STORAGE_KEY'),
-        "secret" => getenv('COCKPIT_S3_STORAGE_SECRET'),
-        "region" => getenv('COCKPIT_S3_STORAGE_REGION'),
-        "bucket" => getenv('COCKPIT_S3_STORAGE_BUCKET'),
-        "prefix" => getenv('COCKPIT_S3_STORAGE_PREFIX'),
-    ]
-];
+// $configs["cloudstorage"] = [
+//     "assets" => [
+//         "type" => "s3",
+//         "key" => getenv('COCKPIT_S3_STORAGE_KEY'),
+//         "secret" => getenv('COCKPIT_S3_STORAGE_SECRET'),
+//         "region" => getenv('COCKPIT_S3_STORAGE_REGION'),
+//         "bucket" => getenv('COCKPIT_S3_STORAGE_BUCKET'),
+//         "prefix" => getenv('COCKPIT_S3_STORAGE_PREFIX'),
+//     ]
+// ];
 
 /*
 detektivo:

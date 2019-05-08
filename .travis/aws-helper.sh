@@ -5,34 +5,32 @@ set -o errexit
 echo "Logging in to AWS Docker Repository"
 $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
 
-function build_dockless {
-	DOCKLESS_IMAGE=$1
-	DOCKLESS_MODE=":latest"
-	DOCKLESS_FILE="Dockerfile"
+function build_JOPLIN {
+	JOPLIN_IMAGE=$1
+	JOPLIN_MODE=":latest"
+	JOPLIN_FILE="Dockerfile"
 
 	# First, determine if we are building the base image.
-	if [ "${DOCKLESS_IMAGE}" = "base" ]; then
-		DOCKLESS_MODE=":base"
-		DOCKLESS_FILE="${DOCKLESS_FILE}.base"
+	if [ "${JOPLIN_IMAGE}" = "base" ]; then
+		JOPLIN_MODE=":base"
+		JOPLIN_FILE="${JOPLIN_FILE}.base"
 	fi;
 
 	# Then, generate the tag string to use in the AWS private registry
-	DOCKLESS_TAG="cityofaustin/dockless-api${DOCKLESS_MODE}"
-	echo "Final Image Name (tag): ${DOCKLESS_TAG}"
+	JOPLIN_TAG="cityofaustin/JOPLIN-api${JOPLIN_MODE}"
+	echo "Final Image Name (tag): ${JOPLIN_TAG}"
 
 	# Build
-  echo "Building ${DOCKLESS_FILE} with tag ${DOCKLESS_TAG}"
-	docker build -f $DOCKLESS_FILE -t $DOCKLESS_TAG \
-				--build-arg DATABASE_URL=$DOCKLESS_DATABASE_URL \
-				.
+  echo "Building ${JOPLIN_FILE} with tag ${JOPLIN_TAG}"
+	docker build -f $JOPLIN_FILE -t $JOPLIN_TAG .
 
 	# Tag
-  echo "Tagging ${DOCKLESS_TAG} with tag ${DOCKLESS_TAG}"
-	docker tag $DOCKLESS_TAG $DOCKLESS_REPO/$DOCKLESS_TAG
+  echo "Tagging ${JOPLIN_TAG} with tag ${JOPLIN_TAG}"
+	docker tag $JOPLIN_TAG $JOPLIN_REPO/$JOPLIN_TAG
 
 	# Push
-  echo "Pushing: $DOCKLESS_REPO/$DOCKLESS_TAG"
-  docker push $DOCKLESS_REPO/$DOCKLESS_TAG
+  echo "Pushing: $JOPLIN_REPO/$JOPLIN_TAG"
+  docker push $JOPLIN_REPO/$JOPLIN_TAG
 
   echo "Done"
 }
@@ -43,12 +41,12 @@ function build_dockless {
 #
 function restart_all_tasks {
   echo "Updating ECS Cluster"
-  aws ecs update-service --force-new-deployment --cluster $DOCKLESS_CLUSTER --service $DOCKLESS_SERVICE
+  aws ecs update-service --force-new-deployment --cluster $JOPLIN_CLUSTER --service $JOPLIN_SERVICE
 
   echo "Stopping any old remaining containers (autoscaling should spawn new tasks)"
-  for DOCKLESS_TASK_ID in $(aws ecs list-tasks --cluster $DOCKLESS_CLUSTER | jq -r ".taskArns[] | split(\"/\") | .[1]");
+  for JOPLIN_TASK_ID in $(aws ecs list-tasks --cluster $JOPLIN_CLUSTER | jq -r ".taskArns[] | split(\"/\") | .[1]");
   do
-	echo "Stopping task id: ${DOCKLESS_TASK_ID}";
-	aws ecs stop-task --cluster $DOCKLESS_CLUSTER --task $DOCKLESS_TASK_ID;
+	echo "Stopping task id: ${JOPLIN_TASK_ID}";
+	aws ecs stop-task --cluster $JOPLIN_CLUSTER --task $JOPLIN_TASK_ID;
   done
 }
