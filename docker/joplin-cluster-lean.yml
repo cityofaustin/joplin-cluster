@@ -13,10 +13,22 @@ services:
       context: ..
       dockerfile: Dockerfile
     environment:
+      COCKPIT_SITE_URL: "http://localhost:8000"
       COCKPIT_SESSION_NAME: cockpit
       COCKPIT_SALT: "xw8X77zZ262X4QwGf32LW434Vtbod9H"
       COCKPIT_DATABASE_SERVER: 'mongodb://joplin2db:27017'
+      # Now we have the S3 configuration
       COCKPIT_DATABASE_NAME: cockpit_master
+      COCKPIT_S3_STORAGE_KEY: "<your_key_id>"
+      COCKPIT_S3_STORAGE_SECRET: "<your_secret_id>"
+      COCKPIT_S3_STORAGE_REGION: "<region>"
+      COCKPIT_S3_STORAGE_BUCKET: "<bucket-name>"
+      COCKPIT_S3_STORAGE_PREFIX: "<prefix>"
+      COCKPIT_S3_STORAGE_URL: "<storage url>"
+
+
+
+
     ports:
       - "8000:80"
     depends_on:
@@ -26,4 +38,3 @@ volumes:
   mongo-vol: null
   esdata1:
     driver: local
-

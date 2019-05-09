@@ -14,9 +14,9 @@ services:
       dockerfile: Dockerfile
     environment:
       COCKPIT_SESSION_NAME: cockpit
-      COCKPIT_SALT: "xw8X77zZ262X4QwGf32LW434Vtbod9H"
+      COCKPIT_SALT: "4aoL2pFwWeN7rD3HG3d6cer6wfu785t"
       COCKPIT_DATABASE_SERVER: 'mongodb://joplin2db:27017'
-      COCKPIT_DATABASE_NAME: cockpit_master
+      COCKPIT_DATABASE_NAME: cockpit_master_production
     ports:
       - "8000:80"
     depends_on:
@@ -37,4 +37,3 @@ volumes:
   mongo-vol: null
   esdata1:
     driver: local
-
