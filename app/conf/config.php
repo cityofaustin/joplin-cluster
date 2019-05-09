@@ -10,6 +10,10 @@ $configs['languages'] = [
     'ar' => 'Arabic',
 ];
 
+if (!empty(getenv('COCKPIT_SITE_URL'))){
+    $configs['site_url'] = getenv('COCKPIT_SITE_URL');
+}
+
 if (!empty(getenv('COCKPIT_SESSION_NAME'))){
     $configs['session.name'] = getenv('COCKPIT_SESSION_NAME');
 }
@@ -42,30 +46,19 @@ if (!empty(getenv('COCKPIT_MAILER_FROM'))){
     ];
 }
 
-/*
-cloudstorage:
-    assets:
-        type: s3
-        key: xxxKeyxxx
-        secret: xxxSecretxxx
-        region: eu-central-1
-        bucket: mybucket
 
-        # optional
-        endpoint: https://eu-central-1.amazonaws.com
-        prefix: subfolder-name
-        url: https://s3.eu-central-1.amazonaws.com
-*/
-// $configs["cloudstorage"] = [
-//     "assets" => [
-//         "type" => "s3",
-//         "key" => getenv('COCKPIT_S3_STORAGE_KEY'),
-//         "secret" => getenv('COCKPIT_S3_STORAGE_SECRET'),
-//         "region" => getenv('COCKPIT_S3_STORAGE_REGION'),
-//         "bucket" => getenv('COCKPIT_S3_STORAGE_BUCKET'),
-//         "prefix" => getenv('COCKPIT_S3_STORAGE_PREFIX'),
-//     ]
-// ];
+$configs["cloudstorage"] = array(
+  "assets" => array(
+    "type" => "s3",
+    "key" => getenv('COCKPIT_S3_STORAGE_KEY'),
+    "secret" => getenv('COCKPIT_S3_STORAGE_SECRET'),
+    "region" => getenv('COCKPIT_S3_STORAGE_REGION'),
+    "bucket" => getenv('COCKPIT_S3_STORAGE_BUCKET'),
+    "prefix" => getenv('COCKPIT_S3_STORAGE_PREFIX'),
+    "endpoint" => getenv('COCKPIT_S3_STORAGE_ENDPOINT'),
+    "url" => getenv('COCKPIT_S3_STORAGE_URL')
+  )
+);
 
 /*
 detektivo:
